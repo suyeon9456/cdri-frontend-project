@@ -31,7 +31,8 @@ const SearchBox = ({
   );
 
   const onQuerySearch = useCallback((value: string) => {
-    onSearch({ query: value });
+    if (value === '') return;
+    onSearch({ query: value.trim() });
   }, []);
 
   return (
