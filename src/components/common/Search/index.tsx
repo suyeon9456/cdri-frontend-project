@@ -15,9 +15,16 @@ interface Props {
   options: { value: string; label: string }[];
   onSearch: (value: string) => void;
   onRemoveKeyword: (value: string) => void;
+  autoFocus?: boolean;
 }
 
-const Search = ({ placeholder, options = [], onSearch, onRemoveKeyword }: Props) => {
+const Search = ({
+  placeholder,
+  options = [],
+  onSearch,
+  onRemoveKeyword,
+  autoFocus = false,
+}: Props) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   const selectListRef = useRef<HTMLUListElement | null>(null);
@@ -65,6 +72,7 @@ const Search = ({ placeholder, options = [], onSearch, onRemoveKeyword }: Props)
           onChange={onChangeSearchInput}
           onKeyDown={onKeyDown}
           onClick={onChangeOpen}
+          autoFocus={autoFocus}
         />
       </SearchInputWrap>
       <SelectList open={open} ref={selectListRef}>

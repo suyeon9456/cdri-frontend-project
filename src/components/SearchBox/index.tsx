@@ -43,6 +43,7 @@ const SearchBox = ({
           options={previousSearches}
           onSearch={onQuerySearch}
           onRemoveKeyword={onRemoveKeyword}
+          autoFocus
         />
         <SearchPopup
           dropdownButton={<Button type="outline" label="상세검색" />}
