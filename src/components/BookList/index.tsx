@@ -12,6 +12,7 @@ interface Props {
 }
 
 const BookList = ({ items, meta, metaText }: Props) => {
+  console.log('🚀 ~ BookList ~ items:', items);
   const [activeKey, setActiveKey] = useState<string>('');
 
   const onChangeActiveKey = useCallback((id: string) => {

@@ -4,7 +4,7 @@ import { font } from '../../styles/font';
 import Button from '../common/Button';
 import ArrowUp from '../../assets/icon/arrow-up.svg?react';
 import LikeIcon from '../../assets/icon/like.svg?react';
-import useLike from '../../hooks/useLike';
+import useLikeStore from '../../stores/useLikeStore';
 
 interface Props {
   id: string;
@@ -22,7 +22,7 @@ const BookListDetailItem = ({
   price,
   onChangeActiveKey,
 }: Props & Omit<Document, 'isbn' | 'publisher' | 'translators' | 'status'>) => {
-  const { toggleLike } = useLike();
+  const { toggleLike } = useLikeStore();
   return (
     <DetailBox>
       <ThumbnailWrap>

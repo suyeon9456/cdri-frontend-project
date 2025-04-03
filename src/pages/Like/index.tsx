@@ -1,8 +1,9 @@
 import BookList from '../../components/BookList';
-import useLike from '../../hooks/useLike';
+import useLikeStore from '../../stores/useLikeStore';
 
 const Like = () => {
-  const { likes } = useLike();
+  const likes = useLikeStore((state) => state.likes);
+  console.log('🚀 ~ Like ~ likes:', likes.length);
   return (
     <BookList items={likes} meta={{ total_count: likes.length ?? 0 }} metaText="내가 찜한 책" />
   );
