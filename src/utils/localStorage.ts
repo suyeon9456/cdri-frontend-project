@@ -1,4 +1,4 @@
-export const getStoredFavorites = <T>(key: string): T[] => {
+export const getStoredList = <T>(key: string): T[] => {
   try {
     const stored = localStorage.getItem(key);
     return stored ? (JSON.parse(stored) as T[]) : [];
@@ -8,9 +8,9 @@ export const getStoredFavorites = <T>(key: string): T[] => {
   }
 };
 
-export const saveFavorites = <T>(key: string, favorites: T[]): void => {
+export const saveStoreList = <T>(key: string, list: T[]): void => {
   try {
-    localStorage.setItem(key, JSON.stringify(favorites));
+    localStorage.setItem(key, JSON.stringify(list));
   } catch (e) {
     console.error('error:', e);
   }

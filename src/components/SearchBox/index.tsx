@@ -44,6 +44,7 @@ const SearchBox = ({
           options={previousSearches}
           onSearch={onQuerySearch}
           onRemoveKeyword={onRemoveKeyword}
+          onClickKeyword={onQuerySearch}
           autoFocus
         />
         <SearchPopup

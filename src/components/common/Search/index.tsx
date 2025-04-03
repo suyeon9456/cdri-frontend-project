@@ -15,15 +15,17 @@ interface Props {
   options: { value: string; label: string }[];
   onSearch: (value: string) => void;
   onRemoveKeyword: (value: string) => void;
+  onClickKeyword: (value: string) => void;
   autoFocus?: boolean;
 }
 
 const Search = ({
   placeholder,
   options = [],
+  autoFocus = false,
   onSearch,
   onRemoveKeyword,
-  autoFocus = false,
+  onClickKeyword,
 }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
@@ -78,7 +80,9 @@ const Search = ({
       <SelectList open={open} ref={selectListRef}>
         {options.map(({ value, label }) => (
           <SelectListItem key={value}>
-            <button className="search-list">{label}</button>
+            <button className="search-list" onClick={() => onClickKeyword(value)}>
+              {label}
+            </button>
             <button onClick={() => onRemoveKeyword(value)}>
               <CloseIcon />
             </button>

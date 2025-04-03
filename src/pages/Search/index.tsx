@@ -1,4 +1,4 @@
-import { ComponentProps, lazy, Suspense, useCallback, useState } from 'react';
+import { lazy, Suspense, useCallback, useState } from 'react';
 import SearchBox from '../../components/SearchBox';
 import useSearchBooks from '../../hooks/useSearchBooks';
 import { RequestGetBooks } from '../../types/getBooks';
@@ -8,13 +8,12 @@ import LoadingIndicator from '../../components/common/LoadingIndicator';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import ErrorFallback from '../../components/common/ErrorFallback';
 import { ErrorBoundary } from '../../components/common/ErrorBoundary';
+import useSearchHistoryStore from '../../stores/useSearchHistoryStore';
 const BookList = lazy(() => import('../../components/BookList'));
 
 const Search = () => {
   const { reset: resetQuery } = useQueryErrorResetBoundary();
-  const [previousSearches, setPreviousSearches] = useState<
-    ComponentProps<typeof SearchBox>['previousSearches'] | []
-  >([]);
+  const { historySearches, setHistory, removeHistory } = useSearchHistoryStore();
   const [searchQuery, setSearchQuery] = useState<{ [K in keyof RequestGetBooks]: string | number }>(
     {
       page: 1,
@@ -24,7 +23,7 @@ const Search = () => {
   );
 
   const onChangePreviousSearch = useCallback((newSearch: { label: string; value: string }) => {
-    setPreviousSearches((prev) => [...prev, newSearch]);
+    setHistory(newSearch);
   }, []);
   const onDetailSearch = useCallback(
     (newSearchs: Array<Partial<{ [K in keyof RequestGetBooks]: string | number }>>) => {
@@ -48,9 +47,7 @@ const Search = () => {
   }, []);
 
   const onRemoveKeyword = useCallback((value: string) => {
-    setPreviousSearches((prev) => {
-      return prev.filter(({ value: v }) => v !== value);
-    });
+    removeHistory(value);
   }, []);
   const { books, hasNextPage, isFetchingNextPage, fetchNextPage } = useSearchBooks({
     query: searchQuery,
@@ -67,7 +64,7 @@ const Search = () => {
     <Container>
       <SearchBox
         title="도서검색"
-        previousSearches={previousSearches}
+        previousSearches={historySearches}
         onSearch={onSearch}
         onDetailSearch={onDetailSearch}
         onRemoveKeyword={onRemoveKeyword}
