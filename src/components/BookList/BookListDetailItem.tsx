@@ -3,12 +3,16 @@ import { Document } from '../../models/book';
 import { font } from '../../styles/font';
 import Button from '../common/Button';
 import ArrowUp from '../../assets/icon/arrow-up.svg?react';
+import LikeIcon from '../../assets/icon/like.svg?react';
+import useLike from '../../hooks/useLike';
 
 interface Props {
+  id: string;
   onChangeActiveKey: (id: string) => void;
 }
 
 const BookListDetailItem = ({
+  id,
   thumbnail,
   title,
   authors,
@@ -18,9 +22,19 @@ const BookListDetailItem = ({
   price,
   onChangeActiveKey,
 }: Props & Omit<Document, 'isbn' | 'publisher' | 'translators' | 'status'>) => {
+  const { toggleLike } = useLike();
   return (
     <DetailBox>
-      <Thumbnail src={thumbnail} alt={`${title} thumbnail`} />
+      <ThumbnailWrap>
+        <Thumbnail src={thumbnail} alt={`${title} thumbnail`} />
+        <button
+          onClick={() =>
+            toggleLike({ id, thumbnail, title, authors, contents, url, sale_price, price })
+          }
+        >
+          <LikeIcon width={20} />
+        </button>
+      </ThumbnailWrap>
       <BookInfo>
         <div className="header">
           <h5>{title}</h5>
@@ -132,4 +146,13 @@ export const PaymentInfo = styled.div`
   }
 `;
 
+export const ThumbnailWrap = styled.div`
+  position: relative;
+  button {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background: transparent;
+  }
+`;
 export default BookListDetailItem;

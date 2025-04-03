@@ -6,13 +6,12 @@ import BookListDetailItem from './BookListDetailItem';
 import { Meta } from '../../types/getBooks';
 
 interface Props {
-  items: Document[];
-  meta: Meta;
+  items: Omit<Document, 'isbn' | 'publisher' | 'translators' | 'status'>[];
+  meta: Pick<Meta, 'total_count'>;
   metaText: string;
 }
 
 const BookList = ({ items, meta, metaText }: Props) => {
-  console.log('🚀 ~ BookList ~ meta:', meta);
   const [activeKey, setActiveKey] = useState<string>('');
 
   const onChangeActiveKey = useCallback((id: string) => {
@@ -36,6 +35,7 @@ const BookList = ({ items, meta, metaText }: Props) => {
       ),
       children: (
         <BookListDetailItem
+          id={title}
           title={title}
           authors={authors}
           price={price}
