@@ -64,6 +64,7 @@ export const SearchDropdownPanel = styled.div`
   margin-top: 10px;
   padding: 30px 20px;
   box-sizing: border-box;
+  background: var(--color-white);
   .search-inputs {
     display: flex;
     gap: 5px;
