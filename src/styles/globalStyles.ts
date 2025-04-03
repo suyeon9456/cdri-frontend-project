@@ -1,6 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import { flattenColorTokens } from './flattenColorTokens';
-import { flattenTypographyTokens } from './flattenTypographyTokens';
+import { flattenColorTokens, flattenTypographyTokens } from './utils';
 
 export const GlobalStyles = createGlobalStyle`
   :root {
