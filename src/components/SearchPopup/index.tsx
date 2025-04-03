@@ -1,32 +1,17 @@
-import { Dropdown, MenuProps } from 'antd';
-import { ComponentProps, ReactNode, useCallback, useState } from 'react';
+import { Dropdown } from 'antd';
+import { ReactNode, useCallback, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import Input from '../common/Input';
 import Select from '../common/Select';
+import { RequestGetBooks } from '../../types/getBooks';
 
 interface Props {
   dropdownButton?: ReactNode;
-  onSearch?: ComponentProps<typeof Button>['onClick'];
+  onSearch: ({ target, query }: Pick<RequestGetBooks, 'target' | 'query'>) => void;
 }
 
-const items: MenuProps['items'] = [
-  {
-    label: 'Submit and continue',
-    key: '1',
-  },
-  {
-    label: 'Submit and continue',
-    key: '2',
-  },
-  {
-    label: 'Submit and continue',
-    key: '3',
-  },
-];
-
-const searchTargetOptions: ComponentProps<typeof Select>['options'] = [
-  { value: 'title', label: '제목' },
+const searchTargetOptions: { value: RequestGetBooks['target']; label: string }[] = [
   { value: 'person', label: '저자명' },
   { value: 'publisher', label: '출판사' },
 ];
@@ -35,7 +20,7 @@ type SearchTargetValue = (typeof searchTargetOptions)[number]['value'];
 
 const SearchPopup = ({ dropdownButton, onSearch }: Props) => {
   const [query, setQuery] = useState<string>('');
-  const [target, setTarget] = useState<SearchTargetValue>(searchTargetOptions[0].value);
+  const [target, setTarget] = useState<RequestGetBooks['target']>(searchTargetOptions[0].value);
 
   const onChangeQuery = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
@@ -45,9 +30,12 @@ const SearchPopup = ({ dropdownButton, onSearch }: Props) => {
     setTarget(value);
   }, []);
 
+  const onClickSearchButton = useCallback(() => {
+    onSearch({ target, query });
+  }, [query, target]);
+
   return (
     <SearchDrop
-      menu={{ items }}
       placement="bottomCenter"
       dropdownRender={() => (
         <SearchDropdownPanel>
@@ -55,11 +43,11 @@ const SearchPopup = ({ dropdownButton, onSearch }: Props) => {
             <Select options={searchTargetOptions} value={target} onChange={onChangeTarget} />
             <Input value={query} onChange={onChangeQuery} />
           </div>
-          <Button type="primary" label="검색하기" block />
+          <Button type="primary" label="검색하기" block onClick={onClickSearchButton} />
         </SearchDropdownPanel>
       )}
     >
-      {dropdownButton ?? <Button type="outline" label="상세검색" onClick={onSearch} />}
+      {dropdownButton ?? <Button type="outline" label="상세검색" />}
     </SearchDrop>
   );
 };

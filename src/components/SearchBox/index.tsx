@@ -1,18 +1,39 @@
 import styled from 'styled-components';
 import Search from '../common/Search';
 import { font } from '../../styles/font';
-import { ComponentProps } from 'react';
+import { ComponentProps, useCallback } from 'react';
 import SearchPopup from '../SearchPopup';
 import Button from '../common/Button';
+import { RequestGetBooks } from '../../types/getBooks';
 
 interface Props {
   title: string;
   previousSearches: ComponentProps<typeof Search>['options'];
-  onSearch: ComponentProps<typeof Search>['onSearch'];
+  onSearch: (query: { [K in keyof RequestGetBooks]: string | number }) => void;
+  onDetailSearch: (
+    newSearchs: Array<Partial<{ [K in keyof RequestGetBooks]: string | number }>>,
+  ) => void;
   onRemoveKeyword: ComponentProps<typeof Search>['onRemoveKeyword'];
 }
 
-const SearchBox = ({ title, previousSearches, onSearch, onRemoveKeyword }: Props) => {
+const SearchBox = ({
+  title,
+  previousSearches,
+  onSearch,
+  onRemoveKeyword,
+  onDetailSearch,
+}: Props) => {
+  const onChangeDetailSearch = useCallback(
+    ({ target: targetValue, query: queryValue }: Pick<RequestGetBooks, 'target' | 'query'>) => {
+      onDetailSearch([{ target: targetValue }, { query: queryValue }]);
+    },
+    [],
+  );
+
+  const onQuerySearch = useCallback((value: string) => {
+    onSearch({ query: value });
+  }, []);
+
   return (
     <SearchContainer>
       <Title>{title}</Title>
@@ -20,10 +41,13 @@ const SearchBox = ({ title, previousSearches, onSearch, onRemoveKeyword }: Props
         <Search
           placeholder="검색어를 입력하세요"
           options={previousSearches}
-          onSearch={onSearch}
+          onSearch={onQuerySearch}
           onRemoveKeyword={onRemoveKeyword}
         />
-        <SearchPopup dropdownButton={<Button type="outline" label="상세검색" />} />
+        <SearchPopup
+          dropdownButton={<Button type="outline" label="상세검색" />}
+          onSearch={onChangeDetailSearch}
+        />
       </SearchWrap>
     </SearchContainer>
   );

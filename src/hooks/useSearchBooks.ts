@@ -11,7 +11,7 @@ const useSearchBooks = ({ query }: { query: RequestGetBooks }) => {
 const getSearchBooksQueryKeys = (query: RequestGetBooks) =>
   queryOptions<ResponseGetBooks>({
     queryKey: searchBooksQueryKey.search(query),
-    queryFn: () => getSearchBooks(),
+    queryFn: () => getSearchBooks(query),
   });
 
 export default useSearchBooks;
