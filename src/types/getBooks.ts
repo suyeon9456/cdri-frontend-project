@@ -54,17 +54,13 @@ export type PageOrSize =
   | 49
   | 50;
 
-type Range<N extends number, M extends number> = N extends M ? N : N | Range<Increment<N>, M>;
-
-type Increment<N extends number> = [...Array<N>]['length'];
-
 export type Target = 'title' | 'isbn' | 'publisher' | 'person';
 
 export interface RequestGetBooks {
   query: string;
   sort?: Sort;
-  page?: Range<1, 50>;
-  size?: Range<1, 50>;
+  page?: PageOrSize;
+  size?: PageOrSize;
   target?: Target;
 }
 
