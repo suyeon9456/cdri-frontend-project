@@ -5,7 +5,16 @@ import { ConfigProvider } from 'antd';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes/router';
 import { theme } from './styles/token/customAntd';
-const queryClient = new QueryClient();
+
+const MINUTE = 1000 * 60;
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      gcTime: 10 * MINUTE,
+    },
+  },
+});
 
 function App() {
   return (
