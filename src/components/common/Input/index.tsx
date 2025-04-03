@@ -8,7 +8,17 @@ interface Props {
 }
 
 const Input = ({ value, placeholder, onChange }: Props) => {
-  return <StyledInput placeholder={placeholder} value={value} onChange={onChange} />;
+  console.log('🚀 ~ Input ~ value:', value);
+  return (
+    <StyledInput
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => {
+        console.log('test');
+        onChange(e);
+      }}
+    />
+  );
 };
 
 const StyledInput = styled.input`
