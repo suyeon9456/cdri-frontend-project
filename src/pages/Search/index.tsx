@@ -1,10 +1,11 @@
-import { ComponentProps, useCallback, useState } from 'react';
+import { ComponentProps, lazy, Suspense, useCallback, useState } from 'react';
 import SearchBox from '../../components/SearchBox';
 import useSearchBooks from '../../hooks/useSearchBooks';
 import { RequestGetBooks } from '../../types/getBooks';
-import BookList from '../../components/BookList';
 import styled from 'styled-components';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
+import LoadingIndicator from '../../components/common/LoadingIndicator';
+const BookList = lazy(() => import('../../components/BookList'));
 
 const Search = () => {
   const [previousSearches, setPreviousSearches] = useState<
@@ -57,7 +58,7 @@ const Search = () => {
     delay: 1000,
   });
 
-  if (!books?.documents || !books?.meta) return <></>;
+  if (!books?.meta) return <></>;
   return (
     <Container>
       <SearchBox
@@ -67,12 +68,14 @@ const Search = () => {
         onDetailSearch={onDetailSearch}
         onRemoveKeyword={onRemoveKeyword}
       />
-      <BookList
-        items={books?.documents}
-        meta={books?.meta}
-        metaText="도서 검색 결과"
-        emptyTitle="검색된 결과가 없습니다."
-      />
+      <Suspense fallback={<LoadingIndicator />}>
+        <BookList
+          items={books?.documents}
+          meta={books?.meta}
+          metaText="도서 검색 결과"
+          emptyTitle="검색된 결과가 없습니다."
+        />
+      </Suspense>
       <div ref={observerRef} />
     </Container>
   );
