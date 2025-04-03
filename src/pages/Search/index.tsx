@@ -4,6 +4,7 @@ import useSearchBooks from '../../hooks/useSearchBooks';
 import { RequestGetBooks } from '../../types/getBooks';
 import BookList from '../../components/BookList';
 import styled from 'styled-components';
+import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 
 const Search = () => {
   const [previousSearches, setPreviousSearches] = useState<
@@ -12,7 +13,7 @@ const Search = () => {
   const [searchQuery, setSearchQuery] = useState<{ [K in keyof RequestGetBooks]: string | number }>(
     {
       page: 1,
-      query: '미움받을 용기',
+      query: '',
       target: 'title',
     },
   );
@@ -46,7 +47,16 @@ const Search = () => {
       return prev.filter(({ value: v }) => v !== value);
     });
   }, []);
-  const { books } = useSearchBooks({ query: searchQuery });
+  const { books, hasNextPage, isFetchingNextPage, fetchNextPage } = useSearchBooks({
+    query: searchQuery,
+  });
+
+  const observerRef = useInfiniteScroll({
+    enabled: hasNextPage && !isFetchingNextPage,
+    onIntersect: () => {
+      fetchNextPage();
+    },
+  });
 
   if (!books?.documents || !books?.meta) return <></>;
   return (
@@ -58,7 +68,13 @@ const Search = () => {
         onDetailSearch={onDetailSearch}
         onRemoveKeyword={onRemoveKeyword}
       />
-      <BookList items={books?.documents} meta={books?.meta} metaText="도서 검색 결과" />
+      <BookList
+        items={books?.documents}
+        meta={books?.meta}
+        metaText="도서 검색 결과"
+        emptyTitle="검색된 결과가 없습니다."
+      />
+      <div ref={observerRef} />
     </Container>
   );
 };
