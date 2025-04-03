@@ -3,8 +3,8 @@ import { font } from '../../../styles/font';
 
 interface Props {
   value: string;
-  placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
 }
 
 const Input = ({ value, placeholder, onChange }: Props) => {
@@ -21,6 +21,7 @@ const StyledInput = styled.input`
   width: 100%;
   border-radius: 0;
   padding: 0 10px;
+  box-sizing: border-box;
 `;
 
 export default Input;

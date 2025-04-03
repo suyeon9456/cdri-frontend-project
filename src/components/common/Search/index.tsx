@@ -16,7 +16,7 @@ interface Props {
   onRemoveKeyword: (value: string) => void;
 }
 
-const Search = ({ placeholder, options, onSearch, onRemoveKeyword }: Props) => {
+const Search = ({ placeholder, options = [], onSearch, onRemoveKeyword }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
 
