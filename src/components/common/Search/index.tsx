@@ -8,6 +8,7 @@ import {
   SelectList,
   SelectListItem,
 } from './styles';
+import { useOutsideClick } from '../../../hooks/useOutSideClick';
 
 interface Props {
   placeholder: string;
@@ -48,6 +49,11 @@ const Search = ({ placeholder, options = [], onSearch, onRemoveKeyword }: Props)
   const onChangeOpen = useCallback(() => {
     setOpen((prev) => !prev);
   }, []);
+
+  useOutsideClick<HTMLUListElement | null>(selectListRef, () => {
+    if (open === false) return;
+    setOpen(false);
+  });
 
   return (
     <SearchContainer open={open} listHeight={listHeigh}>
