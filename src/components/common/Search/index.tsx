@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import SearchIcon from '../../../assets/icon/search.svg?react';
 import CloseIcon from '../../../assets/icon/close.svg?react';
 import {
@@ -19,6 +19,17 @@ interface Props {
 const Search = ({ placeholder, options = [], onSearch, onRemoveKeyword }: Props) => {
   const [searchValue, setSearchValue] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
+  const selectListRef = useRef<HTMLUListElement | null>(null);
+  const [listHeigh, setListHeight] = useState(0);
+
+  useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => {
+        const height = selectListRef.current?.getBoundingClientRect().height || 0;
+        setListHeight(height);
+      });
+    }
+  }, [options, open]);
 
   const onChangeSearchInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -39,7 +50,7 @@ const Search = ({ placeholder, options = [], onSearch, onRemoveKeyword }: Props)
   }, []);
 
   return (
-    <SearchContainer open={open}>
+    <SearchContainer open={open} listHeight={listHeigh}>
       <SearchInputWrap>
         <SearchIcon width={20} height={20} />
         <SearchInput
@@ -50,7 +61,7 @@ const Search = ({ placeholder, options = [], onSearch, onRemoveKeyword }: Props)
           onClick={onChangeOpen}
         />
       </SearchInputWrap>
-      <SelectList open={open}>
+      <SelectList open={open} ref={selectListRef}>
         {options.map(({ value, label }) => (
           <SelectListItem key={value}>
             <button className="search-list">{label}</button>

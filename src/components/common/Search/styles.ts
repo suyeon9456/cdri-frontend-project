@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { font } from '../../../styles/font';
 
-export const SearchContainer = styled.div<{ open: boolean }>`
+export const SearchContainer = styled.div<{ open: boolean; listHeight: number }>`
   min-height: 50px;
   height: auto;
   width: 480px;
@@ -12,7 +12,8 @@ export const SearchContainer = styled.div<{ open: boolean }>`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: ${({ open }) => (open ? 'auto' : '50px')};
+  height: ${({ open, listHeight }) =>
+    open ? (listHeight === 0 ? '50px' : `calc(${listHeight}px + 70px)`) : '50px'};
   position: relative;
 `;
 
@@ -43,10 +44,12 @@ export const SelectList = styled.ul<{ open: boolean }>`
   height: ${({ open }) => (open ? 'auto' : '0')};
   overflow: hidden;
   opacity: ${({ open }) => (open ? 1 : 0)};
-  top: 100%;
+  top: 50px;
   transition:
     height 0.3s ease,
     opacity 0.3s ease;
+  background: var(--color-light-gray);
+  right: 10px;
 `;
 export const SelectListItem = styled.li`
   height: 24px;
