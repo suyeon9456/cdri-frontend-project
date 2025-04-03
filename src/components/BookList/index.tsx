@@ -1,14 +1,18 @@
-import { Accordion } from './styles';
+import { Accordion, AccordionContainer, MetaInfo } from './styles';
 import BookListItem from './BookListItem';
 import { Document } from '../../models/book';
 import { useCallback, useMemo, useState } from 'react';
 import BookListDetailItem from './BookListDetailItem';
+import { Meta } from '../../types/getBooks';
 
 interface Props {
   items: Document[];
+  meta: Meta;
+  metaText: string;
 }
 
-const BookList = ({ items }: Props) => {
+const BookList = ({ items, meta, metaText }: Props) => {
+  console.log('🚀 ~ BookList ~ meta:', meta);
   const [activeKey, setActiveKey] = useState<string>('');
 
   const onChangeActiveKey = useCallback((id: string) => {
@@ -44,6 +48,17 @@ const BookList = ({ items }: Props) => {
       ),
     }));
   }, [items, activeKey]);
-  return <Accordion items={bookItems} activeKey={activeKey} />;
+  return (
+    <AccordionContainer>
+      <MetaInfo>
+        <span>{metaText}</span>
+        <span>
+          총 <em className="total-count">{meta.total_count}</em>건
+        </span>
+      </MetaInfo>
+      <Accordion items={bookItems} activeKey={activeKey} />
+    </AccordionContainer>
+  );
 };
+
 export default BookList;
