@@ -4,7 +4,7 @@ import { GlobalStyles } from './styles/globalStyles';
 import { ConfigProvider } from 'antd';
 import { RouterProvider } from 'react-router-dom';
 import router from './routes/router';
-
+import { theme } from './styles/token/customAntd';
 const queryClient = new QueryClient();
 
 function App() {
@@ -12,26 +12,7 @@ function App() {
     <>
       <GlobalStyles />
       <QueryClientProvider client={queryClient}>
-        <ConfigProvider
-          theme={{
-            token: {
-              fontFamily: 'Noto Sans KR, system-ui, Avenir, Helvetica, Arial, sans-serif',
-            },
-            components: {
-              Select: {
-                optionSelectedBg: '#FFFFFF',
-                activeOutlineColor: 'none',
-                activeBorderColor: 'none',
-                optionActiveBg: '#FFFFFF',
-                optionHeight: 30,
-              },
-              Collapse: {
-                headerBg: '#FFFFFF',
-                headerPadding: '10px 30px 10px',
-              },
-            },
-          }}
-        >
+        <ConfigProvider theme={theme}>
           <RouterProvider router={router} />
         </ConfigProvider>
       </QueryClientProvider>
