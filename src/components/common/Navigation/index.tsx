@@ -22,4 +22,8 @@ export const StyledTabs = styled(Tabs)`
     color: var(--color-primary);
     text-shadow: 0 0 0.25px var(--color-primary);
   }
+
+  .ant-tabs-nav::before {
+    border: 0 !important;
+  }
 `;
