@@ -53,9 +53,8 @@ const Search = () => {
 
   const observerRef = useInfiniteScroll({
     enabled: hasNextPage && !isFetchingNextPage,
-    onIntersect: () => {
-      fetchNextPage();
-    },
+    onIntersect: () => fetchNextPage(),
+    delay: 1000,
   });
 
   if (!books?.documents || !books?.meta) return <></>;

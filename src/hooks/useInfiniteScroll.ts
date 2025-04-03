@@ -1,10 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 interface Props {
   onIntersect: () => void;
   enabled?: boolean;
   threshold?: number;
   rootMargin?: string;
+  delay?: number;
+  scrollTarget?: HTMLElement | null;
 }
 
 const useInfiniteScroll = ({
@@ -12,16 +14,30 @@ const useInfiniteScroll = ({
   enabled = true,
   threshold = 1.0,
   rootMargin = '0px',
+  delay = 1000,
+  scrollTarget = null,
 }: Props) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
+  const triggeredRef = useRef(false);
+  const [canScroll, setCanScroll] = useState(true);
 
   useEffect(() => {
-    if (!enabled) return;
+    const target = scrollTarget ?? document.documentElement;
+    const scrollable = target.scrollHeight > target.clientHeight;
+    setCanScroll(scrollable);
+  }, [scrollTarget]);
+
+  useEffect(() => {
+    if (!enabled || !canScroll) return;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting && !triggeredRef.current) {
+          triggeredRef.current = true;
           onIntersect();
+          setTimeout(() => {
+            triggeredRef.current = false;
+          }, delay);
         }
       },
       {
@@ -31,14 +47,12 @@ const useInfiniteScroll = ({
     );
 
     const el = observerRef.current;
-    if (el) {
-      observer.observe(el);
-    }
+    if (el) observer.observe(el);
 
     return () => {
       if (el) observer.unobserve(el);
     };
-  }, [enabled, onIntersect, threshold, rootMargin]);
+  }, [enabled, canScroll, onIntersect, threshold, rootMargin, delay]);
 
   return observerRef;
 };
