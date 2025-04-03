@@ -1,34 +1,31 @@
 import { Select, SelectProps } from 'antd';
 import styled from 'styled-components';
-import ArrowDownIcon from '../../../assets/arrow-down.svg?react';
 import { font } from '../../../styles/font';
+import ArrowDownIcon from '../../../assets/arrow-down.svg?react';
 
-type Props = Pick<SelectProps, 'options' | 'defaultValue' | 'onChange'>;
-
-const CustomSelect = ({ options, defaultValue, onChange }: Props) => {
+type Props = Pick<SelectProps, 'options' | 'value' | 'onChange'>;
+const CustomSelect = ({ options, value, onChange }: Props) => {
   return (
     <StyledSelect
-      style={{ width: 100 }}
-      defaultValue={defaultValue}
-      onChange={onChange}
       options={options}
-      dropdownStyle={{
-        borderRadius: 'none',
-      }}
+      value={value}
+      onChange={onChange}
       suffixIcon={<ArrowDownIcon width={10} color="#B1B8C0" />}
     />
   );
 };
 
-const StyledSelect = styled(Select)`
-  & > .ant-select-selector {
-    border-radius: 0;
+export default CustomSelect;
+
+export const StyledSelect = styled(Select)`
+  height: 36px;
+  min-width: 100px;
+  .ant-select-selector {
     border: 0 !important;
     border-bottom: 1px solid #d2d6da !important;
-    text-align: left;
+    border-radius: 0 !important;
     .ant-select-selection-item {
       ${font('body2Bold')}
-      color: var(--color-text-primary);
     }
   }
   .ant-select-arrow {
@@ -37,5 +34,3 @@ const StyledSelect = styled(Select)`
     }
   }
 `;
-
-export default CustomSelect;
