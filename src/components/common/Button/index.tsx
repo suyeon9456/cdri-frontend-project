@@ -10,8 +10,9 @@ interface Props {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   htmlType?: 'submit' | 'button';
-  icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+  icon?: React.ReactNode;
   block?: boolean;
+  href?: string;
 }
 
 const Button = ({
@@ -22,8 +23,16 @@ const Button = ({
   htmlType = 'button',
   icon: Icon,
   block = false,
+  href,
   ...props
 }: Props) => {
+  if (href != null) {
+    return (
+      <StyledLink href={href} block={block} $type={type} type={htmlType} target="_blank" {...props}>
+        {label}
+      </StyledLink>
+    );
+  }
   return (
     <StyledButton
       block={block}
@@ -34,16 +43,52 @@ const Button = ({
       {...props}
     >
       {label}
-      {Icon && <Icon width={16} height={16} />}
+      {Icon}
     </StyledButton>
   );
 };
 
+const StyledLink = styled.a<{ $type: ButtonType; block: boolean }>`
+  border-radius: 8px;
+  padding: 13px 20px;
+  ${font('caption')}
+  border: none;
+
+  ${({ $type }) =>
+    $type === 'primary' &&
+    css`
+      background: var(--color-primary);
+      color: var(--color-white);
+    `}
+  ${({ $type }) =>
+    $type === 'lightGray' &&
+    css`
+      color: var(--color-text-secondary);
+      background: var(--color-light-gray);
+    `}
+  ${({ $type }) =>
+    $type === 'outline' &&
+    css`
+      color: var(--color-text-sub-title);
+      background: var(--color-white);
+      padding: 10px;
+      border: 1px solid var(--color-text-sub-title);
+    `}
+		${({ block }) =>
+    block === true &&
+    css`
+      display: block;
+      width: 100%;
+    `}
+`;
 const StyledButton = styled.button<{ $type: ButtonType; block: boolean }>`
   border-radius: 8px;
   padding: 13px 20px;
   ${font('caption')}
   border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   ${({ $type }) =>
     $type === 'primary' &&
     css`
