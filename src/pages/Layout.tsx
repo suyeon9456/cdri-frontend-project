@@ -1,6 +1,6 @@
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Navigation } from '../components/common/Navigation';
 import { TabsProps } from 'antd';
 
@@ -15,14 +15,22 @@ const items: TabsProps['items'] = [
   },
 ];
 
+type TabKey = (typeof items)[number]['key'];
+
 const Layout = () => {
-  const location = useLocation();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const onRefresh = useCallback(() => {
-    if (location.pathname.includes('result')) {
-      window.location.href = '/';
-      return;
-    }
-    window.location.reload();
+    navigate('/');
+  }, []);
+
+  const activePath = useMemo(
+    () => items?.find(({ key }) => pathname.includes(key))?.key ?? items[0].key,
+    [pathname],
+  );
+
+  const onNaviClick = useCallback((activeKey: TabKey) => {
+    navigate(`/${activeKey}`);
   }, []);
   return (
     <>
@@ -32,7 +40,7 @@ const Layout = () => {
             CERTICOS BOOKS
           </Logo>
           <div className="center">
-            <Navigation items={items} />
+            <Navigation items={items} activeKey={activePath} onTabClick={onNaviClick} />
           </div>
         </div>
       </Header>
