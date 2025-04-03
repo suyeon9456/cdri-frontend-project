@@ -5,9 +5,13 @@ import { RequestGetBooks } from '../../types/getBooks';
 import styled from 'styled-components';
 import useInfiniteScroll from '../../hooks/useInfiniteScroll';
 import LoadingIndicator from '../../components/common/LoadingIndicator';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import ErrorFallback from '../../components/common/ErrorFallback';
+import { ErrorBoundary } from '../../components/common/ErrorBoundary';
 const BookList = lazy(() => import('../../components/BookList'));
 
 const Search = () => {
+  const { reset: resetQuery } = useQueryErrorResetBoundary();
   const [previousSearches, setPreviousSearches] = useState<
     ComponentProps<typeof SearchBox>['previousSearches'] | []
   >([]);
@@ -68,14 +72,19 @@ const Search = () => {
         onDetailSearch={onDetailSearch}
         onRemoveKeyword={onRemoveKeyword}
       />
-      <Suspense fallback={<LoadingIndicator />}>
-        <BookList
-          items={books?.documents}
-          meta={books?.meta}
-          metaText="도서 검색 결과"
-          emptyTitle="검색된 결과가 없습니다."
-        />
-      </Suspense>
+      <ErrorBoundary
+        onReset={resetQuery}
+        fallbackRender={({ reset }) => <ErrorFallback onReset={reset} />}
+      >
+        <Suspense fallback={<LoadingIndicator />}>
+          <BookList
+            items={books?.documents}
+            meta={books?.meta}
+            metaText="도서 검색 결과"
+            emptyTitle="검색된 결과가 없습니다."
+          />
+        </Suspense>
+      </ErrorBoundary>
       <div ref={observerRef} />
     </Container>
   );

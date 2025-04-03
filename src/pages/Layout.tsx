@@ -1,8 +1,12 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { useCallback, useMemo } from 'react';
+import { Suspense, useCallback, useMemo } from 'react';
 import { Navigation } from '../components/common/Navigation';
 import { TabsProps } from 'antd';
+import { ErrorBoundary } from '../components/common/ErrorBoundary';
+import ErrorFallback from '../components/common/ErrorFallback';
+import { useQueryErrorResetBoundary } from '@tanstack/react-query';
+import LoadingIndicator from '../components/common/LoadingIndicator';
 
 const items: TabsProps['items'] = [
   {
@@ -18,6 +22,7 @@ const items: TabsProps['items'] = [
 type TabKey = (typeof items)[number]['key'];
 
 const Layout = () => {
+  const { reset: resetQuery } = useQueryErrorResetBoundary();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const onRefresh = useCallback(() => {
@@ -45,7 +50,14 @@ const Layout = () => {
         </div>
       </Header>
       <main>
-        <Outlet />
+        <ErrorBoundary
+          onReset={resetQuery}
+          fallbackRender={({ reset }) => <ErrorFallback onReset={reset} />}
+        >
+          <Suspense fallback={<LoadingIndicator />}>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
       </main>
     </>
   );
