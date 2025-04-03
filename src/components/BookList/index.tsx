@@ -4,15 +4,16 @@ import { Document } from '../../models/book';
 import { useCallback, useMemo, useState } from 'react';
 import BookListDetailItem from './BookListDetailItem';
 import { Meta } from '../../types/getBooks';
+import Empty from './Empty';
 
 interface Props {
   items: Omit<Document, 'isbn' | 'publisher' | 'translators' | 'status'>[];
   meta: Pick<Meta, 'total_count'>;
   metaText: string;
+  emptyTitle: string;
 }
 
-const BookList = ({ items, meta, metaText }: Props) => {
-  console.log('🚀 ~ BookList ~ items:', items);
+const BookList = ({ items, meta, metaText, emptyTitle }: Props) => {
   const [activeKey, setActiveKey] = useState<string>('');
 
   const onChangeActiveKey = useCallback((id: string) => {
@@ -49,6 +50,7 @@ const BookList = ({ items, meta, metaText }: Props) => {
       ),
     }));
   }, [items, activeKey]);
+
   return (
     <AccordionContainer>
       <MetaInfo>
@@ -57,7 +59,11 @@ const BookList = ({ items, meta, metaText }: Props) => {
           총 <em className="total-count">{meta.total_count}</em>건
         </span>
       </MetaInfo>
-      <Accordion items={bookItems} activeKey={activeKey} />
+      {items.length === 0 ? (
+        <Empty title={emptyTitle} />
+      ) : (
+        <Accordion items={bookItems} activeKey={activeKey} />
+      )}
     </AccordionContainer>
   );
 };
