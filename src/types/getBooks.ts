@@ -72,5 +72,5 @@ export interface Meta {
 
 export interface ResponseGetBooks {
   meta: Meta;
-  document: Document[];
+  documents: Document[];
 }
