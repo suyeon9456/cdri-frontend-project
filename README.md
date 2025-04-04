@@ -1,54 +1,79 @@
-# React + TypeScript + Vite
+# 과제 설명입니다.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 프로젝트 개요
 
-Currently, two official plugins are available:
+React와 TypeScript 기반으로 구축한 SPA입니다. 과제 요구사항에 따라 재사용가능한 컴포넌트 제작과 비동기 데이터 처리 기능을 구현하였으며 디자인 시스템, 무한 스크롤, 렌더링 최적화, 에러 핸들링 등 실제 서비스 수준의 기능 구현을 목표로 하였습니다.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 실행 방법 및 환경 설정
 
-## Expanding the ESLint configuration
+- Node.js 버전: v18.20.7
+- yarn dev
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 폴더 구조 및 주요 코드 설명
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- assets
+  - 앱에서 사용하는 이미지 리소스들을 모아놓은 폴더입니다.
+- components
+  - 재활용 가능한 UI 구성요소들을 모아놓은 폴더입니다.
+  - common
+    - Input, Button 등 atomic한 컴포넌트들이 있습니다.
+- hooks
+  - 커스텀 훅들이 위치해 있습니다.
+- models
+  - 타입이나 인터페이스 같은 데이터 모델을 정의하는 곳입니다.
+- pages
+  - 라우트 단위의 페이지 컴포넌트들입니다.
+- routes
+  - 라우팅 관련 설정이 있는 폴더입니다.
+- stores
+  - 상태 관리 (Zustand) 관련 훅이 있는 폴더입니다.
+- styles
+  - 스타일 관련 설정이 모여 있음.
+  - 디자인 시스템을 정의해두었습니다.
+- utils
+  - 재사용 가능한 유틸 함수들을 모아놓은 폴더입니다.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 라이브러리 선택 이유
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- vite
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+  - 빠른 개발 서버 구동 속도와 빌드 성능을 제공하는 최신 프론트엔드 빌드 도구입니다. webpack과 비교해봤을떄 전체 번들링을 거쳐야 서버가 시작되는 webpack과 다르게 vite는 ESM 기반으로 필요한 모듈만 로딩하기 때문에 초기 기동 속도가 매우 빠릅니다. 이러한 이유로 제한된 시간에서 과제를 수행해야하고 가벼운 설정을 해야할 때 더 적합한 선택이라 판단하였습니다.
+
+- antd
+
+  - 기본 제공되는 컴포넌트들의 완성도가 높고 다양한 커스터마이징이 가능하여 빠르게 UI를 구성할 수 있습니다. 또한 CDRI 내부에서 antd를 사용하고 있는 것을 확인하였기에, 기존 기술 스택과의 일관성을 유지하기 위해 선택하였습니다.
+
+- axios
+
+  - fetch API 대비 사용이 간편하고 응답을 자동으로 JSON으로 파싱해주는 기능이 내장되어 있어 데이터 처리 효율이 높습니다. 또한 요청 및 응답 인터셉터, 에러 핸들링 기본 설정 등을 유연하게 구성할 수 있어 선택했습니다.
+
+- react-router-dom
+
+  - react에서 라우팅을 효과적으로 처리할 수 있는 라이브러리입니다. URL 파라미터 관리 등 다양한 기능을 안정적으로 제공하고 있ㄷ으며 react 프로젝트에서 사실상 표준처럼 사용되는 라우팅 도구여서 선택했습니다.
+
+- styled-components
+  - CSS-in-JS 방식의 스타일링 라이브러리입니다. 컴포넌트 단위로 스타일을 관리할 수 있어 유지보수성과 재사용성이 높으며, 동적 스타일링도 간편하게 구현 가능해 선택했습니다. 제가 기존에 많이 사용했던 라이브러리이기도 합니다.
+- zustand
+
+  - 상태 관리를 위한 경량 라이브러리입니다. redux에 비해 보일러플레이트 코드 없이 간결하고 직관적인 API를 통해 전역 상태를 쉽게 다룰 수 있습니다. middleware의 persist를 활용하면 상태를 로컬 스토리지 또는 세션 스토리지에 손쉽게 저장할 수 있엉, 새로고침 후에도 데이터를 유지할 수 있습니다. 과제에 데이터를 유지해야하는 부분이 있었기에 적합하다고 판단했습니다.
+
+- prettier
+  - 코드 스타일을 자동으로 포맷팅해주는 도구로, 코드 일관성을 유지하기 위해 도입하였습니다.
+
+## 강조 하고 싶은 기능
+
+- 디자인 시스템 및 스타일 관리
+  전체적인 UI는 일관성 있고 확장 가능한 구조를 위해 디자인 시스템 토큰 기반으로 구축되었으며 토큰화된 색상, 타이포그래피를 활용하여 전역 스타일을 체계적으로 관리할 수 있도록 설계했습니다.
+
+- 컴포넌트 구조 및 재사용성
+  컴포넌트 구조는 atomic design의 atom 단계와 atom단계의 컴포넌트들을 활용해 molecule 단계의 컴포넌트 그리고 page 컴포넌트들로 구성하였습니다.
+  버튼, 입력창, 검색창 등 핵심적인 공통 UI 컴포넌트는 외부 라이브러리를 사용하지 않고 직접 구현하여 더 쉽게 커스터마이징 하여 사용할 수 있도록 하였습니다.
+
+- 렌더링 최적화 및 코드 스플리팅
+  렌더링 최적화를 위해 UI를 위한 state는 page컴포넌트가 아닌 UI와 함께 위치시켰으며, 상위 컴포넌트에서는 데이터, 비즈니스 로직을 담당하도록 분리하여 유지 보수성을 높였습니다. 또한 코드 스플리팅을 위해 `React.lazy` 및 `Suspense`를 적용하였고 해당 비동기 컴포넌트나 API 요청에 대한 로딩 상황에서는 커스텀 로딩 인디케이터를 표시하여 사용자 경험을 개선하였습니다.
+
+- 예외 상황에 대한 에러 핸들링
+  에러 핸들링 측면에서는 React의 `ErrorBoundary`를 통해 예외 상황 발생 시 사용자에게 피드백을 제공할 수 있도록 했으며 예외 발생 시에도 앱의 주요 기능이 마비되지 않도록 하였습니다.
+
+- IntersectionObserver를 활용한 무한 스크롤
+  데이터를 무한히 로드하는 UX 요구사항을 만족시키기 위해 `IntersectionObserver` API를 활용하여 무한 스크롤 기능을 구현하였고 관련 로직은 커스텀 훅으로 추상화하여 재사용성과 유지보수성을 고려한 구조로 개발하였습니다. 이를 통해 동일한 관찰 로직을 여러 리스트형 UI에 일관되게 적용할 수 있도록 설계되었습니다.
