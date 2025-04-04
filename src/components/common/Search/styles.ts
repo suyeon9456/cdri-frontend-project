@@ -75,6 +75,7 @@ export const SelectListItem = styled.li`
   display: flex;
   justify-content: space-between;
   padding-right: 10px;
+  padding-left: 8px;
 
   * {
     ${font('caption')}
