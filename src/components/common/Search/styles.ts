@@ -64,6 +64,7 @@ export const SelectList = styled.ul`
   margin-left: auto;
   width: 422px;
   right: 10px;
+  z-index: 2;
 `;
 export const SelectListItem = styled.li`
   height: 24px;
