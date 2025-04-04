@@ -1,7 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { font } from '../../../styles/font';
 
-export const SearchContainer = styled.div<{ open: boolean; listHeight: number }>`
+export const SearchContainer = styled.div<{ open: boolean }>`
   min-height: 50px;
   height: auto;
   width: 480px;
@@ -12,9 +12,16 @@ export const SearchContainer = styled.div<{ open: boolean; listHeight: number }>
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: ${({ open, listHeight }) =>
-    open ? (listHeight === 0 ? '50px' : `calc(${listHeight}px + 70px)`) : '50px'};
+  ${({ open }) =>
+    open === true &&
+    css`
+      border-radius: 24px 24px 0 0;
+    `}
   position: relative;
+  height: 50px;
+  transition:
+    height 0.3s ease,
+    opacity 0.3s ease;
 `;
 
 export const SearchInputWrap = styled.div`
@@ -34,21 +41,30 @@ export const SearchInput = styled.input`
   color: var(--color-text-sub-title);
 `;
 
-export const SelectList = styled.ul<{ open: boolean }>`
-  list-style: none;
-  padding: 0;
-  margin: 0;
+export const SearchListWrap = styled.div<{ open: boolean }>`
+  width: 480px;
+  background: var(--color-light-gray);
   position: absolute;
-  margin-left: auto;
-  width: 422px;
+  top: 50px;
+  left: 0;
+  padding: 20px;
+  box-sizing: border-box;
+  border-radius: 0 0 24px 24px;
   height: ${({ open }) => (open ? 'auto' : '0')};
   overflow: hidden;
   opacity: ${({ open }) => (open ? 1 : 0)};
-  top: 50px;
   transition:
     height 0.3s ease,
     opacity 0.3s ease;
   background: var(--color-light-gray);
+`;
+
+export const SelectList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-left: auto;
+  width: 422px;
   right: 10px;
 `;
 export const SelectListItem = styled.li`

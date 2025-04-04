@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import SearchIcon from '../../../assets/icon/search.svg?react';
 import CloseIcon from '../../../assets/icon/close.svg?react';
 import {
   SearchContainer,
   SearchInput,
   SearchInputWrap,
+  SearchListWrap,
   SelectList,
   SelectListItem,
 } from './styles';
@@ -30,16 +31,6 @@ const Search = ({
   const [searchValue, setSearchValue] = useState<string>('');
   const [open, setOpen] = useState<boolean>(false);
   const selectListRef = useRef<HTMLUListElement | null>(null);
-  const [listHeigh, setListHeight] = useState(0);
-
-  useEffect(() => {
-    if (open) {
-      requestAnimationFrame(() => {
-        const height = selectListRef.current?.getBoundingClientRect().height || 0;
-        setListHeight(height);
-      });
-    }
-  }, [options, open]);
 
   const onChangeSearchInput = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -65,7 +56,7 @@ const Search = ({
   });
 
   return (
-    <SearchContainer open={open} listHeight={listHeigh}>
+    <SearchContainer open={open}>
       <SearchInputWrap>
         <SearchIcon width={20} height={20} />
         <SearchInput
@@ -77,18 +68,20 @@ const Search = ({
           autoFocus={autoFocus}
         />
       </SearchInputWrap>
-      <SelectList open={open} ref={selectListRef}>
-        {options.map(({ value, label }) => (
-          <SelectListItem key={value}>
-            <button className="search-list" onClick={() => onClickKeyword(value)}>
-              {label}
-            </button>
-            <button onClick={() => onRemoveKeyword(value)}>
-              <CloseIcon />
-            </button>
-          </SelectListItem>
-        ))}
-      </SelectList>
+      <SearchListWrap open={open}>
+        <SelectList ref={selectListRef}>
+          {options.map(({ value, label }) => (
+            <SelectListItem key={value}>
+              <button className="search-list" onClick={() => onClickKeyword(value)}>
+                {label}
+              </button>
+              <button onClick={() => onRemoveKeyword(value)}>
+                <CloseIcon />
+              </button>
+            </SelectListItem>
+          ))}
+        </SelectList>
+      </SearchListWrap>
     </SearchContainer>
   );
 };
