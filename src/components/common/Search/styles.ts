@@ -19,9 +19,7 @@ export const SearchContainer = styled.div<{ open: boolean }>`
     `}
   position: relative;
   height: 50px;
-  transition:
-    height 0.3s ease,
-    opacity 0.3s ease;
+  transition: border-radius 0.3s ease;
 `;
 
 export const SearchInputWrap = styled.div`
